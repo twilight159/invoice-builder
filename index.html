@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#15314b">
+    <meta name="description" content="Create, edit, and print clean invoices as PDFs.">
+    <title>Invoice Builder</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header no-print">
+      <div class="header-inner">
+        <div>
+          <p class="eyebrow">INVOICE WORKSPACE</p>
+          <h1>Invoice Builder</h1>
+        </div>
+        <div class="header-actions">
+          <span id="save-status" role="status" aria-live="polite">Saved in this browser</span>
+          <button type="button" class="button button-outline" id="new-invoice">New invoice</button>
+          <button type="button" class="button button-primary" id="print-invoice">Print / Save PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="editor no-print" aria-label="Edit invoice">
+        <div class="section-heading">
+          <div><p class="eyebrow">01 / DETAILS</p><h2>Invoice details</h2></div>
+          <p>Changes appear in the preview as you type.</p>
+        </div>
+
+        <div class="field-group">
+          <h3>Your details</h3>
+          <div class="fields">
+            <label class="wide">Name or business name<input data-field="senderName" autocomplete="organization" placeholder="Your name or business"></label>
+            <label class="wide">Address<textarea data-field="senderAddress" rows="2" placeholder="Street address, city, postcode"></textarea></label>
+            <label>Email<input data-field="senderEmail" type="email" autocomplete="email" placeholder="name@example.com"></label>
+            <label>Phone<input data-field="senderPhone" type="tel" autocomplete="tel" placeholder="Phone number"></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <h3>Bill to</h3>
+          <div class="fields">
+            <label class="wide">Client name<input data-field="clientName" placeholder="Company or client name"></label>
+            <label class="wide">Billing address<textarea data-field="clientAddress" rows="3" placeholder="Client's billing address"></textarea></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <h3>Invoice</h3>
+          <div class="fields">
+            <label>Invoice number<input data-field="invoiceNumber" placeholder="INV-0001"></label>
+            <label>Currency<input data-field="currency" maxlength="8" placeholder="RM"></label>
+            <label>Issue date<input data-field="issueDate" type="date"></label>
+            <label>Due date<input data-field="dueDate" type="date"></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="group-heading"><h3>Items</h3><button type="button" class="text-button" id="add-item">+ Add item</button></div>
+          <div id="item-editor" class="item-editor"></div>
+        </div>
+
+        <div class="field-group">
+          <h3>Bank transfer</h3>
+          <div class="fields">
+            <label class="wide">Bank<input data-field="bankName" placeholder="Bank name"></label>
+            <label>Account name<input data-field="accountName" placeholder="Account holder"></label>
+            <label>Account number<input data-field="accountNumber" inputmode="numeric" placeholder="Account number"></label>
+          </div>
+        </div>
+
+        <div class="draft-actions">
+          <button type="button" class="button button-outline" id="download-draft">Download draft</button>
+          <label class="button button-outline upload-label" for="upload-draft">Import draft</label>
+          <input id="upload-draft" type="file" accept="application/json,.json" hidden>
+          <p>Drafts stay in this browser. Download one to move it to another device.</p>
+        </div>
+      </section>
+
+      <section class="preview-panel" aria-label="Invoice preview">
+        <div class="preview-heading no-print"><span>LIVE PREVIEW</span><span>A4 · PDF ready</span></div>
+        <article class="invoice-sheet" id="invoice-sheet" aria-label="Printable invoice">
+          <div class="invoice-sender">
+            <div class="strong" data-preview="senderName"></div>
+            <div class="multiline" data-preview="senderAddress"></div>
+            <div data-preview="senderEmail"></div>
+            <div data-preview="senderPhone"></div>
+          </div>
+
+          <div class="invoice-parties">
+            <div>
+              <h2>BILL TO</h2>
+              <div data-preview="clientName"></div>
+              <div class="multiline" data-preview="clientAddress"></div>
+            </div>
+            <div class="invoice-meta">
+              <h2>INVOICE</h2>
+              <div><span>Invoice No:</span><span data-preview="invoiceNumber"></span></div>
+              <div><span>Issue Date:</span><span data-preview="issueDate"></span></div>
+              <div><span>Due Date:</span><span data-preview="dueDate"></span></div>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="invoice-table">
+              <colgroup><col class="description-col"><col class="quantity-col"><col class="price-col"><col class="amount-col"></colgroup>
+              <thead><tr><th>Description</th><th>Quantity</th><th>Unit Price</th><th>Amount</th></tr></thead>
+              <tbody id="preview-items"></tbody>
+            </table>
+          </div>
+
+          <div class="totals">
+            <div><strong>Subtotal</strong><span id="subtotal"></span></div>
+            <div class="grand-total"><strong>Total</strong><strong id="total"></strong></div>
+          </div>
+
+          <div class="payment">
+            <h2>PAY BY BANK TRANSFER</h2>
+            <div data-preview="bankName"></div>
+            <div data-preview="accountName"></div>
+            <div data-preview="accountNumber"></div>
+          </div>
+        </article>
+      </section>
+    </main>
+    <div id="toast" class="toast no-print" role="status" aria-live="polite"></div>
+  </body>
+</html>
