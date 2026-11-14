@@ -17,6 +17,5 @@ Money is shown with two decimals. This basic template does not add tax or discou
 
 ## GitHub Pages
 
-On GitHub, go to **Settings â†’ Pages**, select **Deploy from a branch**, and set **main / (root)**. The site needs no build workflow.
-
+On GitHub, go to **Settings → Pages**, select **Deploy from a branch**, and set **main / (root)**. The site needs no build workflow.
 
