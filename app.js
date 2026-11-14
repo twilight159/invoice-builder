@@ -101,7 +101,7 @@ function renderItemsEditor() {
     card.className = "item-card";
     card.innerHTML = `<div class="item-card-top"><strong>Item ${index + 1}</strong><button type="button" class="remove-item" aria-label="Remove item ${index + 1}">Remove</button></div>
       <div class="item-card-fields">
-        <label class="item-input description-input">Description<input data-item-field="description" placeholder="Item or service" value="${escapeHtml(item.description)}"></label>
+        <label class="item-input description-input">Description<textarea data-item-field="description" rows="3" placeholder="Item or service">${escapeHtml(item.description)}</textarea></label>
         <label class="item-input">Quantity<input data-item-field="quantity" type="number" min="0" step="any" inputmode="decimal" value="${escapeHtml(item.quantity)}"></label>
         <label class="item-input">Unit price<input data-item-field="unitPrice" type="number" min="0" step="0.01" inputmode="decimal" value="${escapeHtml(item.unitPrice)}"></label>
         <div class="item-amount">Amount: <span>${money(numberOrZero(item.quantity) * numberOrZero(item.unitPrice))}</span></div>
@@ -135,6 +135,7 @@ function renderPreview() {
     for (const text of [item.description, item.quantity, money(numberOrZero(item.unitPrice)), money(amount)]) {
       const td = document.createElement("td");
       td.textContent = text;
+      if (tr.children.length === 0) td.className = "item-description";
       tr.append(td);
     }
     tbody.append(tr);
@@ -166,10 +167,12 @@ byId("new-invoice").addEventListener("click", () => {
 
 byId("print-invoice").addEventListener("click", () => {
   save();
-  const previousTitle = document.title;
-  document.title = `Invoice ${draft.invoiceNumber || "draft"}`;
-  window.addEventListener("afterprint", () => { document.title = previousTitle; }, { once:true });
-  window.print();
+  if (!window.jspdf?.jsPDF) {
+    showToast("PDF library could not load. Check your connection and try again.");
+    return;
+  }
+  try { createInvoicePdf(draft, { money, numberOrZero, dateLabel }); }
+  catch (error) { showToast(error.message || "Could not create the PDF."); }
 });
 
 byId("download-draft").addEventListener("click", () => {
@@ -197,3 +200,4 @@ byId("upload-draft").addEventListener("change", async event => {
 });
 
 renderEditor();
+

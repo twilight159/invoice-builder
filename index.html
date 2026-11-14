@@ -6,8 +6,10 @@
     <meta name="theme-color" content="#15314b">
     <meta name="description" content="Create, edit, and print clean invoices as PDFs.">
     <title>Invoice Builder</title>
-    <link rel="stylesheet" href="styles.css?v=2">
-    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=3">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js" defer></script>
+    <script src="pdf.js?v=1" defer></script>
+    <script src="app.js?v=3" defer></script>
   </head>
   <body>
     <header class="app-header no-print">
@@ -19,7 +21,7 @@
         <div class="header-actions">
           <span id="save-status" role="status" aria-live="polite">Saved in this browser</span>
           <button type="button" class="button button-outline" id="new-invoice">New invoice</button>
-          <button type="button" class="button button-primary" id="print-invoice">Print / Save PDF</button>
+          <button type="button" class="button button-primary" id="print-invoice">Download PDF</button>
         </div>
       </div>
     </header>
@@ -130,3 +132,4 @@
     <div id="toast" class="toast no-print" role="status" aria-live="polite"></div>
   </body>
 </html>
+
