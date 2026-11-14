@@ -69,12 +69,12 @@ function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
     byId("save-status").textContent = "Saved in this browser";
   } catch {
-    byId("save-status").textContent = "Browser storage unavailable â€” download a draft";
+    byId("save-status").textContent = "Browser storage unavailable — download a draft";
   }
 }
 function changed() {
   renderPreview();
-  byId("save-status").textContent = "Savingâ€¦";
+  byId("save-status").textContent = "Saving…";
   clearTimeout(saveTimer);
   saveTimer = setTimeout(save, 220);
 }
@@ -200,5 +200,4 @@ byId("upload-draft").addEventListener("change", async event => {
 });
 
 renderEditor();
-
 
