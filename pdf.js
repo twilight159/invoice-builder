@@ -45,8 +45,10 @@ function createInvoicePdf(draft, { money, numberOrZero, dateLabel }) {
     doc.setLineWidth(0.25);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9.5);
+    doc.rect(left, y, 180, 8, "F");
+    doc.setTextColor(0, 0, 0);
     widths.forEach((width, index) => {
-      doc.rect(x, y, width, 8, "FD");
+      doc.rect(x, y, width, 8, "S");
       doc.text(labels[index], x + 2, y + 5.4);
       x += width;
     });
@@ -148,4 +150,3 @@ function createInvoicePdf(draft, { money, numberOrZero, dateLabel }) {
   const filename = `${(draft.invoiceNumber || "invoice").replace(/[^a-z0-9_-]/gi, "_")}.pdf`;
   doc.save(filename);
 }
-
